@@ -52,10 +52,16 @@ public class Conta {
      *   - Conta deve estar ativa (lançar IllegalStateException).
      *   - O saldo deve ser atualizado corretamente.
      */
-    public void depositar(double valor) {
-        // TODO: Implemente usando TDD
-        throw new UnsupportedOperationException();
+public void depositar(double valor) {
+    validarValorPositivo(valor);
+
+    if (!ativa) {
+        throw new IllegalStateException(
+            "Não é possível depositar em conta inativa.");
     }
+
+    saldo += valor;
+}
 
     /**
      * Saca um valor da conta.
@@ -65,10 +71,21 @@ public class Conta {
      *   - Não pode sacar mais do que o saldo (lançar IllegalStateException).
      *   - O saldo deve ser atualizado corretamente.
      */
-    public void sacar(double valor) {
-        // TODO: Implemente usando TDD
-        throw new UnsupportedOperationException();
+   public void sacar(double valor) {
+    validarValorPositivo(valor);
+
+    if (!ativa) {
+        throw new IllegalStateException(
+            "Não é possível sacar de conta inativa.");
     }
+
+    if (valor > saldo) {
+        throw new IllegalStateException(
+            "Saldo insuficiente para realizar o saque.");
+    }
+
+    saldo -= valor;
+}
 
     /**
      * Transfere valor desta conta para outra.
@@ -78,20 +95,43 @@ public class Conta {
      *   - Saldo deve ser suficiente (lançar IllegalStateException).
      *   - O saldo de ambas as contas deve ser atualizado corretamente.
      */
+
     public void transferir(Conta destino, double valor) {
-        // TODO: Implemente usando TDD
-        throw new UnsupportedOperationException();
+    if (!this.ativa || !destino.isAtiva()) {
+        throw new IllegalStateException(
+            "As duas contas devem estar ativas.");
     }
 
+    this.sacar(valor);
+    destino.depositar(valor);
+}
+
     /**
-     * Encerra a conta.
+     * Encerra a conta../
      * Regras:
      *   - A conta já deve estar ativa (lançar IllegalStateException se já inativa).
      *   - O saldo deve ser zero para encerrar (lançar IllegalStateException se houver saldo).
      *   - A propriedade ativa deve ser alterada para false.
      */
+
     public void encerrar() {
-        // TODO: Implemente usando TDD
-        throw new UnsupportedOperationException();
+    if (!ativa) {
+        throw new IllegalStateException(
+            "A conta já está encerrada.");
     }
+
+    if (saldo > 0) {
+        throw new IllegalStateException(
+            "A conta possui saldo e não pode ser encerrada.");
+    }
+
+    ativa = false;
+}
+    private void validarValorPositivo(double valor) {
+        if (valor <= 0) {
+        throw new IllegalArgumentException(
+            "O valor deve ser maior que zero.");
+    }
+}
+
 }
